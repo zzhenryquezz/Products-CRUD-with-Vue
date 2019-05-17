@@ -1,0 +1,11 @@
+{
+    "require": {
+        "slim/slim": "^3.12"
+    },
+    "autoload": {
+        "psr-4": {
+            "Api\\": "./serve/api",
+            "Includes\\": "./serve/includes"
+        }
+    }
+}
