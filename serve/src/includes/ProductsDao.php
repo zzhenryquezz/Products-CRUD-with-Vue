@@ -17,15 +17,15 @@ class ProductsDao
         $stmt = mysqli_query($db->connection, $slq);            
         // check error
         
-        if (mysqli_num_rows($stmt) > 0) {
+        if(!$stmt){
+            $error = ['function' => 'get all products'];
+            $response = $db->get_array_of_errors_mysqli(mysqli_error($db->connection), $error);
+        }else if (mysqli_num_rows($stmt) > 0) {
             while($row = mysqli_fetch_assoc($stmt)) {
                 $response[] =$row;
             }
         }
         
-        if($stmt->error){
-            $response = $db->get_array_of_errors_mysqli($stmt->error);
-        }
 
         $db->close_connection();
         $db = null;
@@ -67,31 +67,31 @@ class ProductsDao
         $slq = "INSERT INTO products (name, description, sku, price) VALUES (? , ?, ?, ?)";
 
         
-            // Get database
-            $db = new Database();            
+        // Get database
+        $db = new Database();            
 
-            $db->connect();            
-            $stmt = $db->connection->prepare($slq);
-            $stmt->bind_param('ssss', $args['name'], $args['description'], $args['sku'], $args['price'] );
-            $stmt->execute();
-            
-            $message = [
-                'request' => [
-                    'status'    => 'success',
-                    'message' => 'product added'
-                ]
-            ];
-            
-            // check error
-            if($stmt->errno){
-                $message = $db->get_array_of_errors_mysqli($stmt->error);
-            }         
-            
-            $stmt->close();
-            $db->close_connection();
-            $db = null;
+        $db->connect();            
+        $stmt = $db->connection->prepare($slq);
+        $stmt->bind_param('ssss', $args['name'], $args['description'], $args['sku'], $args['price'] );
+        $stmt->execute();
+        
+        $message = [
+            'request' => [
+                'status'    => 'success',
+                'message' => 'product added'
+            ]
+        ];
+        
+        // check error
+        if($stmt->errno){
+            $message = $db->get_array_of_errors_mysqli($stmt->error);
+        }         
+        
+        $stmt->close();
+        $db->close_connection();
+        $db = null;
 
-            return $message;        
+        return $message;        
     }
 
     public function update_product(array $args){

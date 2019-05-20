@@ -18,6 +18,7 @@ class Products
 
         $this->register_routes();         
     }
+    
     public function register_routes(){
         $this->app->get('/api/products', [$this, 'get_all_products']);
         $this->app->get('/api/products/{id}', [$this, 'get_product_by_id']);
