@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+     <router-view></router-view>    
   </div>
 </template>
 
@@ -14,7 +14,10 @@ export default {
     HelloWorld
   },
   async created(){
-    let response = await axios.get('http://local.projects/api/orders');
+    this.$store.dispatch('setEndpointApi');
+    let endpoint = this.$store.state.endPoint;
+    console.log(endpoint);
+    let response = await axios.get(`${endpoint}/orders`);
     console.log(response);
   }
 }
