@@ -22,7 +22,9 @@ class Orders
     public function register_routes(){
         $this->app->get('/api/orders', [$this, 'get_all_orders']);        
         $this->app->get('/api/orders/{id}', [$this, 'get_order_by_id']);        
-        $this->app->post('/api/orders/add', [$this, 'add_order']);        
+        $this->app->post('/api/orders/add', [$this, 'add_order']);       
+        $this->app->put('/api/orders/update/{id}', [$this, 'update_order']);       
+        $this->app->delete('/api/orders/delete/{id}', [$this, 'delete_order']);       
     }
 
     public function get_all_orders(Request $request, Response $response, array $args){
@@ -44,12 +46,34 @@ class Orders
     
     public function add_order(Request $request, Response $response, array $args){
         $orderData = [
-            'total'     => $request->getParam('total'),
-            'date'      => $request->getParam('date'),
-            'products'   => $request->getParam('products'),
+            'total'         => $request->getParam('total'),
+            'date'          => $request->getParam('date'),
+            'products'      => $request->getParam('products'),
         ];
 
         $response = $this->ordersDao->add_new_order($orderData);
+
+        echo json_encode($response);
+        
+    }
+    public function update_order(Request $request, Response $response, array $args){
+        
+        $orderData = [
+            'id'            => $request->getAttribute('id'),
+            'total'         => $request->getParam('total'),
+            'products'      => $request->getParam('products')            
+        ];
+        
+        $response = $this->ordersDao->update_order($orderData);
+
+        echo json_encode($response);
+    }
+    
+    public function delete_order(Request $request, Response $response, array $args){
+        
+        $id = $request->getAttribute('id');
+
+        $response = $this->ordersDao->delete_order($id);
 
         echo json_encode($response);
         

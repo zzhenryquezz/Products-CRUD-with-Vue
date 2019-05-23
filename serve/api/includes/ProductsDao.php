@@ -52,8 +52,9 @@ class ProductsDao
                 }
             }
             
-            if($stmt->errno){
-                $response = $db->get_array_of_errors_mysqli($stmt->error);
+            // check error
+            if(!$stmt){
+                return get_array_of_errors_mysqli(mysqli_error($db->connection));
             }
 
             $db->close_connection();
@@ -75,21 +76,23 @@ class ProductsDao
         $stmt->bind_param('ssss', $args['name'], $args['description'], $args['sku'], $args['price'] );
         $stmt->execute();
         
+        
+        
+        // check error
+        if(!$stmt){
+            return get_array_of_errors_mysqli(mysqli_error($db->connection));
+        }         
+        
+        $stmt->close();
+        $db->close_connection();
+        $db = null;
+        
         $message = [
             'request' => [
                 'status'    => 'success',
                 'message' => 'product added'
             ]
         ];
-        
-        // check error
-        if($stmt->errno){
-            $message = $db->get_array_of_errors_mysqli($stmt->error);
-        }         
-        
-        $stmt->close();
-        $db->close_connection();
-        $db = null;
 
         return $message;        
     }
@@ -107,8 +110,8 @@ class ProductsDao
         $stmt->bind_param('sssss', $args['name'], $args['description'], $args['sku'], $args['price'], $args['id'] );
         $stmt->execute();
         
-        if($stmt->errno){
-            $response = $db->get_array_of_errors_mysqli($stmt->error);
+        if(!$stmt){
+            return get_array_of_errors_mysqli(mysqli_error($db->connection));
         }
 
         $stmt->close();
@@ -123,28 +126,22 @@ class ProductsDao
 
         $slq = "DELETE FROM products WHERE id = ?";        
 
-        try {
-            
-            $db = new Database();            
+        $db = new Database();            
 
-            $db->connect();            
-            $stmt = $db->connection->prepare($slq);
-            $stmt->bind_param('s', $id );
-            $stmt->execute();
-            $stmt->close();
-            $db->close_connection();
-            $db = null;
-
-            return ['notice' => ['text' => 'product deleted']];
-
-        } catch( \Exception $error){
-            $message = [
-                'error' => [
-                    'text' => $error->getMessage()
-                ]
-            ];
-            
-            return $message;
+        $db->connect();            
+        $stmt = $db->connection->prepare($slq);
+        $stmt->bind_param('s', $id );
+        $stmt->execute();
+        
+        if(!$stmt){
+            return get_array_of_errors_mysqli(mysqli_error($db->connection));
         }
+
+        $stmt->close();
+        $db->close_connection();
+        $db = null;
+
+        return ['notice' => ['text' => 'product deleted']];
+        
     }
 }

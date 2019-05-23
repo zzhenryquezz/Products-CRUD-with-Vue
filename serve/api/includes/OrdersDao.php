@@ -6,6 +6,12 @@ namespace Includes;
 
 class OrdersDao
 {
+    public $orderProductsDao;
+    
+    public function __construct(){
+        $this->orderProductsDao = new OrderProductsDao();
+    }
+    
     public function get_all_orders(){
         
         $slq = "SELECT * FROM orders";
@@ -98,19 +104,26 @@ class OrdersDao
 
         $db->connect();            
         $stmt = $db->connection->prepare($slq);
-        $stmt->bind_param('ssss', $args['name'], $args['description'], $args['sku'], $args['price'] );
+        $stmt->bind_param('ss', $args['total'], $args['date']);
         $stmt->execute();
         
+        $request = true;
+        foreach ($args['products'] as $product) {
+            $request = $this->orderProductsDao->add_product_in_order($db->connection->insert_id, $product);
+            if(!$request){
+                return ['error in add products'];
+            }
+        }
         $message = [
             'request' => [
                 'status'    => 'success',
-                'message' => 'product added'
+                'message' => 'oder added'
             ]
         ];
         
         // check error
-        if($stmt->errno){
-            $message = $db->get_array_of_errors_mysqli($stmt->error);
+        if(!$stmt){
+            return get_array_of_errors_mysqli(mysqli_error($db->connection));
         }         
         
         $stmt->close();
@@ -119,4 +132,57 @@ class OrdersDao
 
         return $message;
     }
+
+    public function update_order(array $args){
+        
+        $slq = "UPDATE orders SET total = ? WHERE id = ?";
+        $response = ['notice' => ['text' => "order updated"]];        
+        // Get database
+        $db = new Database();            
+
+        $db->connect();            
+        $stmt = $db->connection->prepare($slq);
+        $stmt->bind_param('ss', $args['total'], $args['id']);
+        $stmt->execute();
+
+        $request = $this->orderProductsDao->replace_all_products_in_order($args['id'], $args['products']);
+        if(!$request){
+            return get_array_of_errors_mysqli('error in replace products');
+        }
+        
+        if(!$stmt){
+            return get_array_of_errors_mysqli(mysqli_error($db->connection));
+        }
+
+        $stmt->close();
+        $db->close_connection();
+        $db = null;
+
+        return $response;
+
+    }
+    
+    public function delete_order(int $id){
+
+        $slq = "DELETE FROM orders WHERE id = ?";        
+
+        $db = new Database();            
+
+        $db->connect();            
+        $stmt = $db->connection->prepare($slq);
+        $stmt->bind_param('s', $id );
+        $stmt->execute();
+
+        if(!$stmt){
+            return get_array_of_errors_mysqli(mysqli_error($db->connection));
+        }
+        
+        $stmt->close();
+        $db->close_connection();
+        $db = null;
+
+        return ['notice' => ['text' => 'order deleted']];
+        
+    }
+    
 }
