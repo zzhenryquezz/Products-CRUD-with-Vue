@@ -54,7 +54,7 @@ class ComposerStaticInite3fb1aa572cba1f7e21d290ce4d60687
         ),
         'Includes\\' => 
         array (
-            0 => __DIR__ . '/../..' . '/serve/api/includes',
+            0 => __DIR__ . '/../..' . '/api/includes',
         ),
         'FastRoute\\' => 
         array (
@@ -62,7 +62,7 @@ class ComposerStaticInite3fb1aa572cba1f7e21d290ce4d60687
         ),
         'Api\\' => 
         array (
-            0 => __DIR__ . '/../..' . '/serve/api',
+            0 => __DIR__ . '/../..' . '/api',
         ),
     );
 

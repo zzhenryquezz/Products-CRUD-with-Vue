@@ -4,8 +4,8 @@
     },
     "autoload": {
         "psr-4": {
-            "Api\\": "./serve/api",
-            "Includes\\": "./serve/api/includes"
+            "Api\\": "./api",
+            "Includes\\": "./api/includes"
         }
     }
 }

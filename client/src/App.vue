@@ -7,11 +7,15 @@
 
 <script>
 import HelloWorld from './components/HelloWorld.vue'
-
+import axios from 'axios';
 export default {
   name: 'app',
   components: {
     HelloWorld
+  },
+  async created(){
+    let response = await axios.get('http://local.projects/api/orders');
+    console.log(response);
   }
 }
 </script>

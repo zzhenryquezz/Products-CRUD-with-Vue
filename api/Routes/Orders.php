@@ -20,11 +20,11 @@ class Orders
     }
     
     public function register_routes(){
-        $this->app->get('/api/orders', [$this, 'get_all_orders']);        
-        $this->app->get('/api/orders/{id}', [$this, 'get_order_by_id']);        
-        $this->app->post('/api/orders/add', [$this, 'add_order']);       
-        $this->app->put('/api/orders/update/{id}', [$this, 'update_order']);       
-        $this->app->delete('/api/orders/delete/{id}', [$this, 'delete_order']);       
+        $this->app->get('/orders', [$this, 'get_all_orders']);        
+        $this->app->get('/orders/{id}', [$this, 'get_order_by_id']);        
+        $this->app->post('/orders/add', [$this, 'add_order']);       
+        $this->app->put('/orders/update/{id}', [$this, 'update_order']);       
+        $this->app->delete('/orders/delete/{id}', [$this, 'delete_order']);       
     }
 
     public function get_all_orders(Request $request, Response $response, array $args){

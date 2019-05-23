@@ -20,11 +20,11 @@ class Products
     }
     
     public function register_routes(){
-        $this->app->get('/api/products', [$this, 'get_all_products']);
-        $this->app->get('/api/products/{id}', [$this, 'get_product_by_id']);
-        $this->app->post('/api/products/add', [$this, 'add_product']);
-        $this->app->put('/api/products/update/{id}', [$this, 'update_product']);
-        $this->app->delete('/api/products/delete/{id}', [$this, 'delete_product']);
+        $this->app->get('/products', [$this, 'get_all_products']);
+        $this->app->get('/products/{id}', [$this, 'get_product_by_id']);
+        $this->app->post('/products/add', [$this, 'add_product']);
+        $this->app->put('/products/update/{id}', [$this, 'update_product']);
+        $this->app->delete('/products/delete/{id}', [$this, 'delete_product']);
     }
 
     public function get_all_products(Request $request, Response $response, array $args){

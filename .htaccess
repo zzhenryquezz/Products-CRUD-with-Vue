@@ -1,7 +1,3 @@
-RewriteEngine On
-RewriteBase /tecnofit-avaliation
-
-RewriteCond %{THE_REQUEST} serve/public/([^\s?]*) [NC]
-RewriteRule ^ %1 [L,NE,R=302]
-RewriteRule ^((?!public/).*)$ serve/public/$1 [L,NC]
-
+RewriteEngine on
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteRule ^ public_html/index.html [QSA,L]
