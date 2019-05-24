@@ -7,28 +7,28 @@ namespace Includes;
 class Database
 {
     private $dbHost = 'localhost';
-    private $dbUser = 'tecnofit-avaliation';
-    private $dbPassword = 'tecnofit-avaliation';
-    private $dbName = 'tecnofit-avaliation';
+    private $dbUser = 'Database_teste';
+    private $dbPassword = 'Database_teste';
+    private $dbName = 'Database_teste';
     public $connection;
 
-   
 
-    public function connect(){        
+
+    public function connect(){
         $this->connection = mysqli_connect($this->dbHost, $this->dbUser, $this->dbPassword, $this->dbName);
 
-        
+
         if( mysqli_connect_errno() ) {
             $error = [
                 "error" => [
                     'message' => 'database error connect',
-                    'mysql error number'   => mysqli_connect_errno()                    
+                    'mysql error number'   => mysqli_connect_errno()
                     ]
             ];
             $this->close_connection();
             die(json_encode($error));
-        }        
-            
+        }
+
         $this->create_tables();
     }
 
@@ -47,18 +47,18 @@ class Database
             total DECIMAL(15,2) NOT NULL,
             date  DATETIME NOT NULL
         );';
-        
+
         $sql_querys[2] = 'CREATE TABLE IF NOT EXISTS orders_products (
             id INT(11) AUTO_INCREMENT PRIMARY KEY,
             order_id INT(11) NOT NULL,
-            product_id Int(11)            
+            product_id Int(11)
         );';
 
-        foreach ($sql_querys as $sql) {            
+        foreach ($sql_querys as $sql) {
             $stmt = mysqli_query( $this->connection, $sql);
         }
 
-        
+
         if(!$stmt){
             $error = [
                 "error" => [
@@ -70,19 +70,19 @@ class Database
             $this->close_connection();
             die(json_encode($error));
         }
-        
-        
+
+
     }
-    
+
     public function get_array_of_errors_mysqli($message, array $args = []){
         $error = ['error' => [
                 'message' => $message
             ]
         ];
-        
+
         foreach ($args as $key => $value) {
-            $error['error'][$key] = $value;    
-        }        
+            $error['error'][$key] = $value;
+        }
 
         return $error;
     }

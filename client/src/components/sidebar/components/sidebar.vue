@@ -18,7 +18,7 @@
             <v-icon>assignment</v-icon>
           </v-list-tile-action>
           <v-list-tile-content>
-            <v-list-tile-title>Orders</v-list-tile-title>
+            <v-list-tile-title>Pedidos</v-list-tile-title>
           </v-list-tile-content>
         </v-list-tile>
         <v-list-tile :to="{ name: 'products-page' }">
@@ -26,7 +26,7 @@
             <v-icon>shopping_cart</v-icon>
           </v-list-tile-action>
           <v-list-tile-content>
-            <v-list-tile-title>Products</v-list-tile-title>
+            <v-list-tile-title>Produtos</v-list-tile-title>
           </v-list-tile-content>
         </v-list-tile>
       </v-list>
@@ -42,7 +42,7 @@ export default {
     },
     computed:{
         computedDrawer: {
-            get: function(){            
+            get: function(){
               return  this.drawer;
             },
             set: function(value){
