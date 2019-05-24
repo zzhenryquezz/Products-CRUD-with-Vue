@@ -2,7 +2,7 @@
      <v-flex xs12>
         <v-card class="elevation-12">
             <v-toolbar dark color="primary">
-                <v-toolbar-title>orders</v-toolbar-title>
+                <v-toolbar-title>Pedidos</v-toolbar-title>
                 <v-spacer />        
             </v-toolbar>
             <v-card-text>

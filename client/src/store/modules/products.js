@@ -32,6 +32,7 @@ export default {
         },
         getProductById: (state, getters, rootState, rootGetters) => async (id) => {
             let endpoint = rootGetters.getEndPointApi;
+            console.log(id)
             try {
                 let response = await axios.get(`${endpoint}products/${id}`);
 ;                return response;

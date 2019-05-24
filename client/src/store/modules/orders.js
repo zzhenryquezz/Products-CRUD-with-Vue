@@ -13,7 +13,7 @@ export default {
     actions:{
         setOrdersList({ commit, getters }){
             return new Promise((resolve) => {
-                getters.listAllOrders().then(response => {                        
+                getters.listAllOrders().then(response => {                      
                    resolve(commit('changeOrdersList', response.data));
                 })
             });
@@ -23,7 +23,7 @@ export default {
         listAllOrders: (state, getters, rootState, rootGetters) => async () => {
             let endpoint = rootGetters.getEndPointApi;
             try {
-                let response = await axios.get(`${endpoint}orders`);                
+                let response = await axios.get(`${endpoint}orders`);
 ;                return response;
             } catch (error) {
                 console.log(JSON.stringify(error))
@@ -33,8 +33,8 @@ export default {
         getOrderById: (state, getters, rootState, rootGetters) => async (id) => {
             let endpoint = rootGetters.getEndPointApi;
             try {
-                let response = await axios.get(`${endpoint}orders/${id}`);
-;                return response;
+                let response = await axios.get(`${endpoint}orders/${id}`);                
+;               return response;
             } catch (error) {
                 console.log(error)
                 return false;
@@ -44,8 +44,8 @@ export default {
         addNewOrder: (state, getters, rootState, rootGetters) => async (orderData) => {
             let endpoint = rootGetters.getEndPointApi;
             try {
-                let response = await axios.post(`${endpoint}orders/add`, orderData);
-;                return response;
+                let response = await axios.post(`${endpoint}orders/add`, orderData);                
+;               return response;
             } catch (error) {
                 console.log(error)
                 return false;

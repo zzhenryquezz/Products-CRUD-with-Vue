@@ -1,5 +1,10 @@
 <template>   
 <v-dialog v-model="computedShowDialog" max-width="500px">
+    <template  v-slot:activator="{ on }">
+        <v-flex class="text-xs-right" xs12>
+            <v-btn color="primary" dark class="mb-2" v-on="on">Adicionar Pedido</v-btn>
+        </v-flex>
+    </template>
     <v-card>
         <v-card-title>
         <span class="headline">{{ formTitle }}</span>
@@ -10,20 +15,6 @@
             <v-layout wrap>            
             <v-flex sm12>
                 <h1>Total: R$ {{ total.toString().replace('.', ',') }}</h1>
-            </v-flex>            
-            <v-flex sm12>
-                <v-menu>
-                    
-                    <v-text-field
-                        slot="activator"
-                        v-model="order.date"
-                        label="Seleciono uma nova data"
-                        prepend-icon="event"
-                        readonly                        
-                    ></v-text-field>
-                    
-                    <v-date-picker v-model="order.date" no-title scrollable ></v-date-picker>
-                </v-menu>
             </v-flex>            
             <v-flex v-if="!computedProducts" sm12>
                 <v-alert
@@ -81,7 +72,12 @@ export default {
     data(){
         return {
             newItem: true,
-            formTitle: '',                        
+            formTitle: '',            
+            order: {                
+                date: moment().format('YYYY-MM-DD'),
+                products: [],
+                total: '',
+            },
             search: null,
             error:{
                 show: false,
@@ -90,14 +86,10 @@ export default {
         }
     },
     props:{
-        showUpdateForm:{
+        showAddForm:{
             type: Boolean,
             required: true,
-        },
-        order:{
-            type: Object,
-            required: true
-        } 
+        },        
     },
     created() {
         this.setFormValues();
@@ -105,7 +97,7 @@ export default {
     computed: {
         computedShowDialog:{
             get: function(){            
-              return  this.showUpdateForm;
+              return  this.showAddForm;
             },
             set: function(value){
                 this.$emit('ChangeShowUpdateForm', value)
@@ -134,13 +126,13 @@ export default {
     methods:{
         setFormValues(){            
             this.$store.dispatch('products/setProductsList');            
-            this.formTitle = 'Editar Pedido';                        
+            this.formTitle = 'Adicionar Pedido';                        
         },        
         async save () {
-            let order = JSON.parse(JSON.stringify(this.order));            
-            order.date = moment(order.date).format('YYYY-MM-DDTHH:mm:ss');            
+            let order = JSON.parse(JSON.stringify(this.order));
             order.total = this.total;            
-            let response = await this.$store.getters['orders/updateOrder'](order.id, order);
+                                    
+            let response = await this.$store.getters['orders/addNewOrder'](order);
             
             if(!response){                
                 this.error.show = true;
