@@ -5,20 +5,21 @@
         @close="showUpdateForm = false; editProduct = false"
         :formTitle="formTitle"
         :editProduct="editProduct"
-        @ChangeShowUpdateForm="(value) => showUpdateForm = value"
+        @ChangeShowUpdateForm="(value) => {showUpdateForm = value;editProduct = false}"
         :editedItem="editedItem" 
         :showUpdateForm="showUpdateForm" />
     
     <v-data-table
       :headers="headers"
       :items="computedProducts"
+      rows-per-page-text="Produtos por pagina"
       class="elevation-1"
     >
       <template v-slot:items="props">        
         <td class="text-xs-left">{{ props.item.name }}</td>
         <td class="text-xs-left">{{ props.item.description }}</td>
         <td class="text-xs-left">{{ props.item.sku }}</td>
-        <td class="text-xs-left">{{ props.item.price }}</td>
+        <td class="text-xs-left">R$ {{ props.item.price.replace('.', ',') }}</td>
         <td class="text-xs-left">
           <v-icon
             small
@@ -81,9 +82,13 @@ import { UpdateProductForm } from './../';
         this.editedItem = Object.assign({}, item)
         this.showUpdateForm = true
       },
-      deleteItem (item) {
-        const index = this.desserts.indexOf(item)
-        confirm('Are you sure you want to delete this item?') && this.desserts.splice(index, 1)
+      async deleteItem (product) {
+        let answer = confirm('Are you sure you want to delete this item?');
+        if(answer == true){
+          await this.$store.getters['products/deleteProduct'](product.id);
+          await this.$store.dispatch('products/setProductsList');
+          alert('product delete')
+        }
       },
       
     }
