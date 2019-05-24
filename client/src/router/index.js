@@ -9,6 +9,16 @@ const routes = [
         path: '/',
         name: 'home',
         component: Preloader
+    },
+    {
+        path: '/products',
+        name: 'products-page',
+        component: Preloader
+    },
+    {
+        path: '/orders',
+        name: 'orders-page',
+        component: Preloader
     }
 ];
 const router = new VueRouter({

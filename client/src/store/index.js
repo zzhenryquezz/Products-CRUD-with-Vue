@@ -3,21 +3,7 @@ import Vuex from 'vuex';
 
 Vue.use(Vuex)
 
-const store = new Vuex.Store({
-    state: {
-      endPoint: 0
-    },
-    mutations:{
-        changeEndpointApi(state, newEndpoint){
-            state.endPoint = newEndpoint;
-        }
-    },
-    actions:{
-        setEndpointApi ({ commit, getters }){
-            let endPoint = getters.getEndPointApi;
-            commit('changeEndpointApi', endPoint);
-        }
-    },
+const store = new Vuex.Store({    
     getters:{
         getEndPointApi: (state) => {
             let endPoint;
@@ -28,7 +14,11 @@ const store = new Vuex.Store({
             }
             return endPoint;
         }
-    }
+    },
+    modules:{
+        products: require('./modules/products').default,
+        orders: require('./modules/orders').default
+    },
 })
 
 export default store;
