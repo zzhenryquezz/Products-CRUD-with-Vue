@@ -7,9 +7,11 @@ namespace Includes;
 class OrdersDao
 {
     public $orderProductsDao;
+    public $productsDao;
     
     public function __construct(){
         $this->orderProductsDao = new OrderProductsDao();
+        $this->productsDao = new ProductsDao();
     }
     
     public function get_all_orders(){
@@ -44,6 +46,7 @@ class OrdersDao
     public function get_all_products_orders_by_id(int $id){
         
         $slq = "SELECT * FROM orders_products WHERE order_id = $id";
+        $order_products = [];
         $response = [];
             
         $db = new Database();            
@@ -53,14 +56,17 @@ class OrdersDao
         // check error
         
         if(!$stmt){
-            $error = ['function' => 'get all products order'];
-            $response = $db->get_array_of_errors_mysqli(mysqli_error($db->connection), $error);
+            $error = ['function' => 'get all products order 1'];
+            $order_products = $db->get_array_of_errors_mysqli(mysqli_error($db->connection), $error);
         }else if (mysqli_num_rows($stmt) > 0) {
             while($row = mysqli_fetch_assoc($stmt)) {
-                $response[] = $row;
+                $order_products[] = $row;
             }
         }
         
+        foreach ($order_products as $product) {
+            $response[] = $this->productsDao->get_product_by_id($product['product_id']);
+        }        
 
         $db->close_connection();
         $db = null;        
@@ -135,14 +141,14 @@ class OrdersDao
 
     public function update_order(array $args){
         
-        $slq = "UPDATE orders SET total = ? WHERE id = ?";
+        $slq = "UPDATE orders SET total = ?, date = ? WHERE id = ?";
         $response = ['notice' => ['text' => "order updated"]];        
         // Get database
         $db = new Database();            
 
         $db->connect();            
         $stmt = $db->connection->prepare($slq);
-        $stmt->bind_param('ss', $args['total'], $args['id']);
+        $stmt->bind_param('sss', $args['total'], $args['date'], $args['id']);
         $stmt->execute();
 
         $request = $this->orderProductsDao->replace_all_products_in_order($args['id'], $args['products']);

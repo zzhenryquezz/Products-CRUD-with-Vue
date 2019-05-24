@@ -60,7 +60,7 @@ class ProductsDao
             $db->close_connection();
             $db = null;
 
-            return $response;        
+            return $response[0];        
     }
 
     public function add_new_product(array $args){
