@@ -6,15 +6,15 @@ export default {
         ordersList: false
     },
     mutations:{
-        changeOrdersLists(state, newOrdersLists){            
-            state.ordersLists = newOrdersLists;
+        changeOrdersList(state, newOrdersLists){            
+            state.ordersList = newOrdersLists;
         }
     },
     actions:{
-        setOrdersLists({ commit, getters }){
+        setOrdersList({ commit, getters }){
             return new Promise((resolve) => {
-                getters.listAllOrders().then(response => {                
-                   resolve(commit('changeOrdersLists', response.data));
+                getters.listAllOrders().then(response => {                        
+                   resolve(commit('changeOrdersList', response.data));
                 })
             });
         }
@@ -23,7 +23,7 @@ export default {
         listAllOrders: (state, getters, rootState, rootGetters) => async () => {
             let endpoint = rootGetters.getEndPointApi;
             try {
-                let response = await axios.get(`${endpoint}orders`);
+                let response = await axios.get(`${endpoint}orders`);                
 ;                return response;
             } catch (error) {
                 console.log(JSON.stringify(error))

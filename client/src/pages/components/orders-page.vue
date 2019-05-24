@@ -6,7 +6,7 @@
                 <v-spacer />        
             </v-toolbar>
             <v-card-text>
-            
+            <TableOrders />
             </v-card-text>
             <v-card-actions>
             
@@ -16,8 +16,11 @@
 </template>
 
 <script>
+import { TableOrders } from './../../components/orders';
 export default {
-
+    components:{
+        TableOrders
+    }
 }
 </script>
 

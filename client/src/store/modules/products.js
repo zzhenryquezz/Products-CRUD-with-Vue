@@ -6,7 +6,7 @@ export default {
         productsList: false
     },
     mutations:{
-        changeProductsLists(state, newProductsList){            
+        changeProductsList(state, newProductsList){            
             state.productsList = newProductsList;
         }
     },
@@ -14,7 +14,7 @@ export default {
         setProductsList({ commit, getters }){
             return new Promise((resolve) => {
                 getters.listAllProducts().then(response => {                
-                   resolve(commit('changeProductsLists', response.data));
+                   resolve(commit('changeProductsList', response.data));
                 })
             });
         }

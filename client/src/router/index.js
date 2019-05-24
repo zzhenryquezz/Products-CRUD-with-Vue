@@ -18,7 +18,14 @@ const routes = [
     {
         path: '/orders',
         name: 'orders-page',
-        component: Preloader
+        component: Preloader,
+        children:[
+            {
+                path: ':id',
+                name: 'single-order',
+                component: Preloader
+            }
+        ]
     }
 ];
 const router = new VueRouter({
